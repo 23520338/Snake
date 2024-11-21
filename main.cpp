@@ -1,7 +1,7 @@
 #include <iostream>
 #include <windows.h>
 #include <cstdlib>
-#include <conio
+#include <conio.h>
 #define tuongtrai 10
 #define tuongphai 70
 #define tuongtren 5
