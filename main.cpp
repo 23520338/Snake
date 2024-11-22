@@ -84,6 +84,10 @@ bool KiemTraQuaTrungThan(QUA qua, CONRAN r);
 void TaoQua(QUA &qua, CONRAN r) ;
 void AnQua(QUA &qua, CONRAN &r, int &Diem);
 void RanXuyenTuong(CONRAN &r);
+void Gameplay1(int mucdo);
+void Gameplay2(int mucdo);
+bool Game_Over1(CONRAN r);
+bool Game_Over2(CONRAN r);
 int main()
 {
     cout << "--------------- CHAO MUNG DEN VOI GAME RAN SAN MOI ---------------\n\n";
@@ -153,6 +157,148 @@ int main()
                 return 0;
             }
         }
+    }
+}
+
+void Ve_Tuong()
+{
+    for(int i=tuongtrai+1 ;i<=tuongphai-1 ;i++)
+    {
+        gotoxy(i,tuongtren ); cout<<"-";
+    gotoxy(i,tuongduoi ); cout<<"-";
+    }
+    for(int i=tuongtren+1 ;i<=tuongduoi-1 ;i++)
+    {
+        gotoxy(tuongtrai,i); cout<<"|";
+        gotoxy(tuongphai,i); cout<<"|";
+    }
+    gotoxy(tuongtrai,tuongtren); cout<<"+";
+    gotoxy(tuongphai,tuongtren); cout<<"+";
+    gotoxy(tuongtrai,tuongduoi); cout<<"+";
+    gotoxy(tuongphai,tuongduoi); cout<<"+";
+}
+
+void AnQua(QUA &qua,CONRAN &r,int &Diem)
+{
+    if(r.A[0]==qua.A)
+    {
+        r.DoDai++;
+        Diem+=10;
+        gotoxy(tuongtrai+38,tuongtren-2);
+        cout<<Diem;
+        TaoQua(qua,r);
+        qua.Ve();
+    }
+}
+void TaoQua(QUA &qua,CONRAN r)
+{
+    bool check =KiemTraQuaTrungThan(qua,r);
+    do{
+        qua.A.x=rand()%(tuongphai-tuongtrai-1)+tuongtrai+1;
+      qua.A.y=rand()%(tuongduoi-tuongtren-1)+tuongtren+1;
+      check =KiemTraQuaTrungThan(qua,r);
+    }while(check);
+}
+bool operator==(Point A,Point B)
+{
+    if(A.x==B.x&&A.y==B.y)
+        return true;
+    else return false;
+}
+bool KiemTraQuaTrungThan(QUA qua, CONRAN r)
+{
+    for(int i=0;i<r.DoDai;i++)
+    {
+        if(qua.A==r.A[i]) return 1;
+    }
+    return 0;
+}
+
+void RanXuyenTuong(CONRAN &r)
+{
+    for(int i = 0; i < r.DoDai; i++)
+    {
+        if(r.A[i].x == tuongtrai)
+            r.A[i].x += 59;
+        if(r.A[i].x == tuongphai)
+            r.A[i].x -= 59;
+        if(r.A[i].y == tuongtren)
+            r.A[i].y += 19;
+        if(r.A[i].y == tuongduoi)
+            r.A[i].y -= 19;
+    }
+}
+
+void Gameplay1(int mucdo)
+{
+    int DIEM=0;
+    gotoxy(tuongtrai+24,tuongtren-2);
+    cout<<"DIEM CUA BAN: ";
+    gotoxy(tuongtrai+38,tuongtren-2);
+    cout<<DIEM;
+    CONRAN r;
+    QUA qua;
+    int Huong = 0;
+    char t;
+    Ve_Tuong();
+    TaoQua(qua,r);
+    qua.Ve();
+  while (1){
+        r.XoaCu();
+        r.Ve();
+        if(Game_Over1(r))
+        {
+            gotoxy(tuongtrai+25,tuongduoi-10);
+            cout<<"BAN DA CHET";
+            break;
+        }
+        if (kbhit()){
+            t = getch();
+            if (t=='a'&& Huong!=0) Huong = 2;
+            if (t=='w'&& Huong!=1) Huong = 3;
+            if (t=='d'&& Huong!=2) Huong = 0;
+            if (t=='s'&& Huong!=3) Huong = 1;
+        }
+        AnQua(qua,r,DIEM);
+        r.DiChuyen(Huong);
+        Sleep(mucdo);
+    }
+}
+
+void Gameplay2(int mucdo)
+{
+    int DIEM=0;
+    gotoxy(tuongtrai+24,tuongtren-2);
+    cout<<"DIEM CUA BAN: ";
+    gotoxy(tuongtrai+38,tuongtren-2);
+    cout<<DIEM;
+    CONRAN r;
+    QUA qua;
+    int Huong = 0;
+    char t;
+    Ve_Tuong();
+    TaoQua(qua,r);
+    qua.Ve();
+  while (1){
+        r.XoaCu();
+        r.Ve();
+        if(Game_Over2(r))
+        {
+            gotoxy(tuongtrai+25,tuongduoi-10);
+            cout<<"BAN DA CHET";
+            break;
+        }
+        if (kbhit()){
+            t = getch();
+            if (t=='a'&& Huong!=0) Huong = 2;
+            if (t=='w'&& Huong!=1) Huong = 3;
+            if (t=='d'&& Huong!=2) Huong = 0;
+            if (t=='s'&& Huong!=3) Huong = 1;
+        }
+        AnQua(qua,r,DIEM);
+        r.DiChuyen(Huong);
+        RanXuyenTuong(r);
+        Sleep(mucdo);
     }
 }
 
